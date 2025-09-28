@@ -25,9 +25,7 @@ export const metadata: Metadata = {
       "Transforming waste into opportunity with mapping, rewards, and data dashboards.",
     url: "/",
     siteName: "GreenKudi",
-    images: [
-      { url: "/vercel.svg", width: 1200, height: 630, alt: "GreenKudi" },
-    ],
+    images: [{ url: "/logo.svg", width: 1200, height: 630, alt: "GreenKudi" }],
     locale: "en_US",
     type: "website",
   },
@@ -36,7 +34,7 @@ export const metadata: Metadata = {
     title: "GreenKudi — Waste-to-Energy & Rewards",
     description:
       "Transforming waste into opportunity with mapping, rewards, and data dashboards.",
-    images: ["/vercel.svg"],
+    images: ["/logo.svg"],
   },
 };
 
