@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import { NavLink } from "./nav/NavLink";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
@@ -46,30 +47,36 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <header className="border-b border-black/10 bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/50 sticky top-0 z-40">
-          <div className="container flex items-center justify-between h-14">
-            <Link href="/" className="font-semibold">
-              <span className="text-[--primary]">Green</span>Kudi
-            </Link>
-            <nav className="flex gap-4 text-sm">
-              <Link href="/map" className="hover:underline">
-                Map
+        <div className="container grid grid-cols-1 md:grid-cols-[260px_minmax(0,1fr)] gap-6 py-6">
+          <aside className="hidden md:block sticky top-6 h-[calc(100dvh-3rem)]">
+            <div className="rounded-xl border bg-white p-4 shadow-sm">
+              <Link href="/" className="font-semibold block mb-3">
+                <span className="text-[--primary]">Green</span>Kudi
               </Link>
-              <Link href="/centers" className="hover:underline">
-                Centers
-              </Link>
-              <Link href="/rewards" className="hover:underline">
-                Rewards
-              </Link>
-              <Link href="/dashboard" className="hover:underline">
-                Dashboard
-              </Link>
-            </nav>
+              <nav className="grid gap-1 text-sm">
+                <NavLink href="/map">Map</NavLink>
+                <NavLink href="/centers">Centers</NavLink>
+                <NavLink href="/rewards">Rewards</NavLink>
+                <NavLink href="/dashboard">Dashboard</NavLink>
+              </nav>
+            </div>
+          </aside>
+          <main className="min-w-0">{children}</main>
+        </div>
+        <nav className="md:hidden fixed bottom-6 left-0 right-0 z-50">
+          <div className="mx-auto max-w-md px-4">
+            <div className="rounded-2xl border bg-white/95 backdrop-blur px-3 py-2 shadow-lg">
+              <ul className="grid grid-cols-4 text-sm">
+                <li><NavLink href="/map" compact>Map</NavLink></li>
+                <li><NavLink href="/centers" compact>Centers</NavLink></li>
+                <li><NavLink href="/rewards" compact>Rewards</NavLink></li>
+                <li><NavLink href="/dashboard" compact>Dash</NavLink></li>
+              </ul>
+            </div>
           </div>
-        </header>
-        <main className="container py-8">{children}</main>
-        <footer className="mt-16 border-t border-black/10 py-8 text-sm text-black/70">
-          <div className="container flex items-center justify-between">
+        </nav>
+        <footer className="mt-10 border-t border-black/10 py-6 text-sm text-black/70">
+          <div className="container flex items-center justify-between gap-4">
             <p>© {new Date().getFullYear()} GreenKudi</p>
             <p>
               Built for <span className="font-medium">Climate & Sustainability</span>
