@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## GreenKudi: Waste-to-Energy & Rewards Platform
+
+Theme: Climate & Sustainability — Building for a Greener Future
+
+### Problem
+African cities generate thousands of tons of waste daily. Much ends up in waterways and open dumps, causing floods, emissions, and missed recycling opportunities. Participation is low due to limited incentives and mapping.
+
+### Solution
+GreenKudi engages citizens to report waste hotspots, navigate to recycling/energy centers, and earn redeemable points. Institutions get real-time dashboards for smarter logistics.
+
+### Key Features
+- Waste Hotspot Mapping
+- Recycling & Energy Center Locator
+- Gamified Rewards (airtime, mobile money, vouchers)
+- Community & Government Dashboard
+
+### Tech
+- Next.js App Router, Tailwind v4
+- Maps: OpenStreetMap via Leaflet
+- Rewards integrations (future): MTN MoMo, Flutterwave, Paystack
 
 ## Getting Started
 
-First, run the development server:
-
+1) Install dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2) Configure environment
+Create `.env.local` from `.env.example` and set optional map tile URL.
+```env
+# public: map tiles & attribution
+NEXT_PUBLIC_MAP_TILE_URL="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+NEXT_PUBLIC_MAP_ATTRIBUTION="&copy; OpenStreetMap contributors"
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3) Run the dev server
+```bash
+npm run dev
+```
+Open `http://localhost:3000`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Routes
+- `/` — Landing
+- `/map` — Waste hotspot map (click map to add a mock report)
+- `/centers` — Nearby recycling/energy centers (mock data)
+- `/rewards` — Rewards and redemption (mock)
+- `/dashboard` — Metrics overview (mock)
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Next Steps
+- Image upload and AI verification
+- Auth + user profiles
+- Real data backend for hotspots and centers
+- Mobile money integration for rewards
