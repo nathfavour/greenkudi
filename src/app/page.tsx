@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Card } from "./components/Card";
 
 export default function Home() {
   return (
@@ -24,7 +25,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="rounded-xl border bg-white p-6 shadow-sm">
+        <Card padding="lg">
           <ul className="grid gap-4 text-sm">
             <li>
               <span className="font-semibold">Waste Hotspot Mapping:</span> Upload
@@ -43,7 +44,7 @@ export default function Home() {
               municipalities, NGOs, and recyclers.
             </li>
           </ul>
-        </div>
+        </Card>
       </div>
 
       <div className="grid gap-4">

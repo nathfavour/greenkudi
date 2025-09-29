@@ -1,13 +1,15 @@
+import { Card } from "../components/Card";
+
 export const metadata = {
   title: "Dashboard — GreenKudi",
 };
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border bg-white p-5 shadow-sm">
+    <Card padding="md">
       <p className="text-sm text-black/70">{label}</p>
       <p className="text-3xl font-bold mt-1">{value}</p>
-    </div>
+    </Card>
   );
 }
 
@@ -26,12 +28,12 @@ export default function DashboardPage() {
         <StatCard label="CO₂e avoided (t)" value="640" />
       </div>
 
-      <div className="rounded-xl border bg-white p-5 shadow-sm">
+      <Card>
         <h2 className="font-semibold">Notes</h2>
         <p className="text-sm text-black/70 mt-1">
           Connect data sources and mobile money providers to operationalize rewards and routing.
         </p>
-      </div>
+      </Card>
     </section>
   );
 }

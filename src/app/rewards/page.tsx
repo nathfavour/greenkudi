@@ -1,3 +1,5 @@
+import { Card } from "../components/Card";
+
 export const metadata = {
   title: "Rewards — GreenKudi",
 };
@@ -17,31 +19,31 @@ export default function RewardsPage() {
         <p className="text-black/70 text-sm">Earn points by reporting and recycling.</p>
       </header>
 
-      <div className="rounded-xl border bg-white p-5 shadow-sm">
+      <Card>
         <p className="text-sm text-black/70">Your balance</p>
         <p className="text-4xl font-bold text-[--primary]">{points} pts</p>
-      </div>
+      </Card>
 
       <div className="grid md:grid-cols-3 gap-4">
         {tiers.map((t) => (
-          <div key={t.id} className="rounded-xl border bg-white p-5 shadow-sm">
+          <Card key={t.id}>
             <h2 className="text-lg font-semibold">{t.name}</h2>
             <p className="text-sm text-black/70">Cost: {t.cost} pts</p>
             <button className="btn-primary mt-3" disabled={points < t.cost}>
               Redeem
             </button>
-          </div>
+          </Card>
         ))}
       </div>
 
-      <div className="rounded-xl border bg-white p-5 shadow-sm">
+      <Card>
         <h3 className="font-semibold">How to earn</h3>
         <ul className="list-disc list-inside text-sm text-black/80 mt-2">
           <li>Report a waste hotspot with photo (+20 pts)</li>
           <li>Drop off recyclable items at a center (+50 pts)</li>
           <li>Verify a community report (+10 pts)</li>
         </ul>
-      </div>
+      </Card>
     </section>
   );
 }

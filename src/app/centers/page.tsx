@@ -1,3 +1,5 @@
+import { Card } from "../components/Card";
+
 export const metadata = {
   title: "Recycling & Energy Centers — GreenKudi",
 };
@@ -42,7 +44,7 @@ export default function CentersPage() {
       </header>
       <div className="grid md:grid-cols-2 gap-4">
         {centers.map((c) => (
-          <div key={c.id} className="rounded-xl border bg-white p-5 shadow-sm">
+          <Card key={c.id}>
             <h2 className="text-lg font-semibold">{c.name}</h2>
             <p className="text-sm text-black/70">{c.address}</p>
             <p className="mt-2 text-sm"><span className="font-medium">Accepts:</span> {c.materials.join(", ")}</p>
@@ -63,7 +65,7 @@ export default function CentersPage() {
                 View on Map
               </a>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
     </section>
