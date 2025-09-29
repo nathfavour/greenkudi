@@ -2,35 +2,39 @@ import { PropsWithChildren, HTMLAttributes } from "react";
 
 interface CardProps extends PropsWithChildren, HTMLAttributes<HTMLDivElement> {
   padding?: "sm" | "md" | "lg";
-  interactive?: boolean;
+  variant?: "default" | "elevated" | "interactive";
 }
 
 const paddingMap = {
-  sm: "p-3",
-  md: "p-5",
-  lg: "p-7",
+  sm: "p-4",
+  md: "p-6",
+  lg: "p-8",
+};
+
+const variantMap = {
+  default: "card",
+  elevated: "card-elevated",
+  interactive: "card-interactive",
 };
 
 export function Card({
-  as: Component = "div",
   padding = "md",
-  interactive = false,
-  className,
+  variant = "default",
+  className = "",
   children,
   ...rest
 }: CardProps) {
+  const classes = [
+    variantMap[variant],
+    paddingMap[padding],
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+    
   return (
-    <Component
-      className={clsx(
-        "rounded-xl border bg-white shadow-sm",
-        paddingMap[padding],
-        interactive &&
-          "transition-colors hover:border-[--primary]/40 focus-within:border-[--primary]/50",
-        className
-      )}
-      {...rest}
-    >
+    <div className={classes} {...rest}>
       {children}
-    </Component>
+    </div>
   );
 }

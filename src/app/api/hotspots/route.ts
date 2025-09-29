@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     };
     hotspots.push(hotspot);
     return new Response(JSON.stringify(hotspot), { status: 201 });
-  } catch (e) {
+  } catch {
     return new Response(JSON.stringify({ error: "invalid json" }), { status: 400 });
   }
 }

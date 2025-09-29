@@ -1,30 +1,53 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { PropsWithChildren } from "react";
+import type { NavItem } from "@/navigation";
 
-interface Props extends PropsWithChildren {
-  href: string;
-  compact?: boolean;
+interface NavLinkProps {
+  item: NavItem;
+  variant?: "desktop" | "mobile";
 }
 
-export function NavLink({ href, children, compact }: Props) {
+export function NavLink({ item, variant = "desktop" }: NavLinkProps) {
   const pathname = usePathname();
-  const isActive = pathname === href;
-  const base = compact
-    ? "inline-flex items-center justify-center h-9 w-full rounded-md"
-    : "inline-flex items-center gap-2 rounded-md px-3 py-2";
-  const active = isActive
-    ? "bg-[--primary]/10 text-[--primary] border border-[--primary]/20"
-    : "hover:bg-black/5 text-black/80";
+  const isActive = pathname === item.href;
+
+  if (variant === "mobile") {
+    return (
+      <Link
+        href={item.href}
+        className={`nav-link-mobile ${isActive ? "nav-link-mobile-active" : ""}`}
+        aria-current={isActive ? "page" : undefined}
+      >
+        <span className="text-lg" role="img" aria-hidden="true">
+          {item.icon}
+        </span>
+        <span className="text-xs font-medium">
+          {item.shortLabel || item.label}
+        </span>
+      </Link>
+    );
+  }
 
   return (
     <Link
-      href={href}
+      href={item.href}
+      className={`nav-link ${isActive ? "nav-link-active" : ""}`}
       aria-current={isActive ? "page" : undefined}
-      className={`${base} ${active}`}
     >
-      {children}
+      <span className="text-lg" role="img" aria-hidden="true">
+        {item.icon}
+      </span>
+      <div className="flex flex-col">
+        <span className="font-medium">
+          {item.label}
+        </span>
+        {item.description && (
+          <span className="text-xs text-[--text-muted]">
+            {item.description}
+          </span>
+        )}
+      </div>
     </Link>
   );
 }

@@ -42,10 +42,15 @@ Open `http://localhost:3000`.
 
 ## Routes
 - `/` — Landing
-- `/map` — Waste hotspot map (click map to add a mock report)
+- `/map` — Waste hotspot map (click map to add a report; persists in-memory only)
 - `/centers` — Nearby recycling/energy centers (mock data)
 - `/rewards` — Rewards and redemption (mock)
 - `/dashboard` — Metrics overview (mock)
+
+### Mock API
+Hotspots are served via a simple in-memory API route for demo purposes:
+- `GET /api/hotspots` returns current hotspots
+- `POST /api/hotspots` with `{ lat, lng, note? }` adds a hotspot (non-persistent)
 
 ## Next Steps
 - Image upload and AI verification

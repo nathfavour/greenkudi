@@ -12,6 +12,19 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
+    plugins: {
+      'jsx-a11y': (await import('eslint-plugin-jsx-a11y')).default,
+    },
+    rules: {
+      'jsx-a11y/alt-text': 'warn',
+      'jsx-a11y/anchor-is-valid': 'error',
+      'jsx-a11y/aria-role': 'warn',
+      'jsx-a11y/no-autofocus': 'off',
+      'jsx-a11y/no-redundant-roles': 'warn',
+      'jsx-a11y/media-has-caption': 'warn',
+    },
+  },
+  {
     ignores: [
       "node_modules/**",
       ".next/**",
