@@ -19,7 +19,11 @@ export function NavLink({ href, children, compact }: Props) {
     : "hover:bg-black/5 text-black/80";
 
   return (
-    <Link href={href} className={`${base} ${active}`}>
+    <Link
+      href={href}
+      aria-current={isActive ? "page" : undefined}
+      className={`${base} ${active}`}
+    >
       {children}
     </Link>
   );

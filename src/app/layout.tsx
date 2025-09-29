@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import { navItems } from "@/navigation";
 import { NavLink } from "./nav/NavLink";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
@@ -53,11 +54,12 @@ export default function RootLayout({
               <Link href="/" className="font-semibold block mb-3">
                 <span className="text-[--primary]">Green</span>Kudi
               </Link>
-              <nav className="grid gap-1 text-sm">
-                <NavLink href="/map">Map</NavLink>
-                <NavLink href="/centers">Centers</NavLink>
-                <NavLink href="/rewards">Rewards</NavLink>
-                <NavLink href="/dashboard">Dashboard</NavLink>
+              <nav className="grid gap-1 text-sm" aria-label="Primary">
+                {navItems.map((item) => (
+                  <NavLink key={item.href} href={item.href}>
+                    {item.shortLabel ?? item.label}
+                  </NavLink>
+                ))}
               </nav>
             </div>
           </aside>
@@ -66,11 +68,14 @@ export default function RootLayout({
         <nav className="md:hidden fixed bottom-6 left-0 right-0 z-50">
           <div className="mx-auto max-w-md px-4">
             <div className="rounded-2xl border bg-white/95 backdrop-blur px-3 py-2 shadow-lg">
-              <ul className="grid grid-cols-4 text-sm">
-                <li><NavLink href="/map" compact>Map</NavLink></li>
-                <li><NavLink href="/centers" compact>Centers</NavLink></li>
-                <li><NavLink href="/rewards" compact>Rewards</NavLink></li>
-                <li><NavLink href="/dashboard" compact>Dash</NavLink></li>
+              <ul className="grid grid-cols-4 text-sm" role="menubar" aria-label="Primary mobile">
+                {navItems.map((item) => (
+                  <li key={item.href} role="none">
+                    <NavLink href={item.href} compact>
+                      {item.shortLabel ?? item.label}
+                    </NavLink>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

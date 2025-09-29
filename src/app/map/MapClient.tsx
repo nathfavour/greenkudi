@@ -61,5 +61,5 @@ export default function MapClient() {
     });
   }, [hotspots]);
 
-  return <div ref={containerRef} className="w-full h-[70vh] rounded-lg overflow-hidden border" />;
+  return <div ref={containerRef} className="w-full h-[70vh] rounded-lg overflow-hidden border" aria-label="Interactive waste hotspot map" role="application" />;
 }
