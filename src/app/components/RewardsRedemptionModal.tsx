@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -81,6 +81,12 @@ export default function RewardsRedemptionModal({
   const currentOption = options.find((opt) => opt.id === selectedOption);
   const pointsToAmount = Math.floor(parseInt(amount || "0"));
   const canAfford = pointsToAmount > 0 && pointsToAmount <= userPoints;
+
+  useEffect(() => {
+    if (options.length === 1 && !selectedOption) {
+      setSelectedOption(options[0].id);
+    }
+  }, [options, selectedOption]);
 
   const handleSubmit = async () => {
     if (!canAfford || !selectedOption || !destination) {
@@ -264,8 +270,6 @@ export default function RewardsRedemptionModal({
                 </RadioGroup>
               </FormControl>
             )}
-
-            {options.length === 1 && !selectedOption && setSelectedOption(options[0].id)}
 
             <TextField
               label="Amount (points)"
