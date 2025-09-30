@@ -32,10 +32,8 @@ const nextConfig: NextConfig = {
       headers: securityHeaders,
     },
   ],
-  experimental: {
-    turbo: {
-      resolveAlias: { "@": "./src" },
-    },
+  turbopack: {
+    resolveAlias: { "@": "./src" },
   },
 };
 

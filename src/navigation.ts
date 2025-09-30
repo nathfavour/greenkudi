@@ -3,6 +3,7 @@ export interface NavItem {
   label: string;
   shortLabel?: string;
   icon: string;
+  muiIcon: string;
   description?: string;
 }
 
@@ -12,6 +13,7 @@ export const navItems: NavItem[] = [
     label: "Home", 
     shortLabel: "Home", 
     icon: "🏠",
+    muiIcon: "Home",
     description: "Welcome to GreenKudi"
   },
   { 
@@ -19,6 +21,7 @@ export const navItems: NavItem[] = [
     label: "Waste Hotspot Map", 
     shortLabel: "Map", 
     icon: "🗺️",
+    muiIcon: "Map",
     description: "Report and view waste hotspots"
   },
   { 
@@ -26,6 +29,7 @@ export const navItems: NavItem[] = [
     label: "Centers", 
     shortLabel: "Centers", 
     icon: "♻️",
+    muiIcon: "Recycling",
     description: "Find recycling centers"
   },
   { 
@@ -33,6 +37,7 @@ export const navItems: NavItem[] = [
     label: "Rewards", 
     shortLabel: "Rewards", 
     icon: "🎁",
+    muiIcon: "CardGiftcard",
     description: "Earn points and redeem rewards"
   },
   { 
@@ -40,6 +45,7 @@ export const navItems: NavItem[] = [
     label: "Dashboard", 
     shortLabel: "Data", 
     icon: "📊",
+    muiIcon: "Dashboard",
     description: "Analytics and insights"
   },
 ];

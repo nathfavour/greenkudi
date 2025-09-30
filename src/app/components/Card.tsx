@@ -1,40 +1,44 @@
-import { PropsWithChildren, HTMLAttributes } from "react";
+import { PropsWithChildren } from "react";
+import MuiCard from "@mui/material/Card";
+import { SxProps, Theme } from "@mui/material/styles";
 
-interface CardProps extends PropsWithChildren, HTMLAttributes<HTMLDivElement> {
+interface CardProps extends PropsWithChildren {
   padding?: "sm" | "md" | "lg";
   variant?: "default" | "elevated" | "interactive";
+  sx?: SxProps<Theme>;
+  onClick?: () => void;
 }
 
 const paddingMap = {
-  sm: "p-4",
-  md: "p-6",
-  lg: "p-8",
-};
-
-const variantMap = {
-  default: "card",
-  elevated: "card-elevated",
-  interactive: "card-interactive",
+  sm: 2,
+  md: 3,
+  lg: 4,
 };
 
 export function Card({
   padding = "md",
   variant = "default",
-  className = "",
+  sx,
   children,
-  ...rest
+  onClick,
 }: CardProps) {
-  const classes = [
-    variantMap[variant],
-    paddingMap[padding],
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
-    
   return (
-    <div className={classes} {...rest}>
+    <MuiCard
+      elevation={variant === "elevated" ? 4 : variant === "interactive" ? 2 : 1}
+      onClick={onClick}
+      sx={{
+        p: paddingMap[padding],
+        borderRadius: 3,
+        transition: 'all 0.2s ease',
+        cursor: variant === "interactive" ? 'pointer' : 'default',
+        '&:hover': variant === "interactive" ? {
+          transform: 'translateY(-4px)',
+          boxShadow: 6,
+        } : {},
+        ...sx,
+      }}
+    >
       {children}
-    </div>
+    </MuiCard>
   );
 }
