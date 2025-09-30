@@ -1,13 +1,17 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import L, { type LatLngExpression, type LeafletMouseEvent, type Map as LeafletMap } from "leaflet";
-import { Box, Button, IconButton, CircularProgress } from "@mui/material";
+import { Box, Button, IconButton, CircularProgress, Fab } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import ReportWasteModal from "../components/ReportWasteModal";
 
 interface Hotspot {
   id: string;
   position: LatLngExpression;
   note?: string;
   createdAt?: number;
+  photos?: string[];
+  category?: string;
 }
 
 export default function MapClient() {
@@ -20,6 +24,8 @@ export default function MapClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [selectedPosition, setSelectedPosition] = useState<{ lat: number; lng: number } | undefined>();
 
   const tileUrl =
     process.env.NEXT_PUBLIC_MAP_TILE_URL ||
@@ -61,31 +67,8 @@ export default function MapClient() {
     markersLayerRef.current = L.layerGroup().addTo(map);
 
     const onClick = async (e: LeafletMouseEvent) => {
-      setSaving(true);
-      const optimistic: Hotspot = {
-        id: `temp-${Date.now()}`,
-        position: [e.latlng.lat, e.latlng.lng],
-        note: "New report",
-        createdAt: Date.now(),
-      };
-      setHotspots((prev) => [...prev, optimistic]);
-      try {
-        const res = await fetch("/api/hotspots", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lat: e.latlng.lat, lng: e.latlng.lng, note: optimistic.note }),
-        });
-        if (!res.ok) throw new Error();
-        const saved = await res.json();
-        setHotspots((prev) =>
-          prev.map((h) => (h.id === optimistic.id ? { ...h, id: saved.id, createdAt: saved.createdAt } : h))
-        );
-      } catch {
-        setError("Failed to save hotspot");
-        setHotspots((prev) => prev.filter((h) => h.id !== optimistic.id));
-      } finally {
-        setSaving(false);
-      }
+      setSelectedPosition({ lat: e.latlng.lat, lng: e.latlng.lng });
+      setReportModalOpen(true);
     };
     map.on("click", onClick);
 
@@ -95,6 +78,45 @@ export default function MapClient() {
       mapRef.current = null;
     };
   }, [center, tileUrl, tileAttribution, fetchHotspots]);
+
+  const handleReportSubmit = async (data: {
+    lat: number;
+    lng: number;
+    note: string;
+    photos: string[];
+    category: string;
+  }) => {
+    setSaving(true);
+    const optimistic: Hotspot = {
+      id: `temp-${Date.now()}`,
+      position: [data.lat, data.lng],
+      note: data.note,
+      photos: data.photos,
+      category: data.category,
+      createdAt: Date.now(),
+    };
+    setHotspots((prev) => [...prev, optimistic]);
+
+    try {
+      const res = await fetch("/api/hotspots", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to save");
+      const saved = await res.json();
+      setHotspots((prev) =>
+        prev.map((h) =>
+          h.id === optimistic.id ? { ...h, id: saved.id, createdAt: saved.createdAt } : h
+        )
+      );
+    } catch (err) {
+      setHotspots((prev) => prev.filter((h) => h.id !== optimistic.id));
+      throw err;
+    } finally {
+      setSaving(false);
+    }
+  };
 
   useEffect(() => {
     const layer = markersLayerRef.current;
@@ -235,6 +257,31 @@ export default function MapClient() {
           </Box>
         </Box>
       </Box>
+
+      {/* FAB for reporting */}
+      <Fab
+        color="primary"
+        aria-label="report waste"
+        sx={{
+          position: 'absolute',
+          bottom: 80,
+          right: 16,
+          zIndex: 10,
+        }}
+        onClick={() => setReportModalOpen(true)}
+      >
+        <AddIcon />
+      </Fab>
+
+      <ReportWasteModal
+        open={reportModalOpen}
+        onClose={() => {
+          setReportModalOpen(false);
+          setSelectedPosition(undefined);
+        }}
+        position={selectedPosition}
+        onSubmit={handleReportSubmit}
+      />
     </div>
   );
 }
