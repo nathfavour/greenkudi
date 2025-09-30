@@ -4,6 +4,7 @@ import L, { type LatLngExpression, type LeafletMouseEvent, type Map as LeafletMa
 import { Box, Button, IconButton, CircularProgress, Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ReportWasteModal from "../components/ReportWasteModal";
+import HotspotDetailModal from "../components/HotspotDetailModal";
 
 interface Hotspot {
   id: string;
@@ -26,6 +27,8 @@ export default function MapClient() {
   const [saving, setSaving] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<{ lat: number; lng: number } | undefined>();
+  const [selectedHotspot, setSelectedHotspot] = useState<Hotspot | undefined>();
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
 
   const tileUrl =
     process.env.NEXT_PUBLIC_MAP_TILE_URL ||
@@ -124,11 +127,74 @@ export default function MapClient() {
     if (!layer || !map) return;
     layer.clearLayers();
     hotspots.forEach((h) => {
-      const marker = L.marker(h.position as [number, number]).bindPopup(
-        `<div><strong>Reported hotspot</strong><div style="color:#333">${h.note ?? ""}</div></div>`
-      );
+      const categoryColors: Record<string, string> = {
+        plastic: "#3b82f6",
+        organic: "#10b981",
+        electronic: "#f59e0b",
+        metal: "#6366f1",
+        paper: "#8b5cf6",
+        mixed: "#64748b",
+      };
+      
+      const color = categoryColors[h.category || "mixed"];
+      
+      const customIcon = L.divIcon({
+        className: 'custom-marker',
+        html: `<div style="
+          width: 32px;
+          height: 32px;
+          background: ${color};
+          border: 3px solid white;
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <span style="transform: rotate(45deg); font-size: 16px;">📍</span>
+        </div>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+      });
+      
+      const marker = L.marker(h.position as [number, number], { icon: customIcon })
+        .bindPopup(
+          `<div style="min-width: 200px;">
+            <strong style="color: ${color};">${h.category || 'mixed'}</strong>
+            <div style="color:#333; margin-top: 4px;">${h.note ?? ""}</div>
+            <button 
+              onclick="window.dispatchEvent(new CustomEvent('hotspot-click', { detail: '${h.id}' }))"
+              style="
+                margin-top: 8px;
+                padding: 6px 12px;
+                background: ${color};
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 500;
+              "
+            >View Details</button>
+          </div>`
+        );
       marker.addTo(layer);
     });
+  }, [hotspots]);
+
+  useEffect(() => {
+    const handleHotspotClick = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const hotspot = hotspots.find(h => h.id === customEvent.detail);
+      if (hotspot) {
+        setSelectedHotspot(hotspot as Hotspot);
+        setDetailModalOpen(true);
+      }
+    };
+
+    window.addEventListener('hotspot-click', handleHotspotClick);
+    return () => window.removeEventListener('hotspot-click', handleHotspotClick);
   }, [hotspots]);
 
   return (
