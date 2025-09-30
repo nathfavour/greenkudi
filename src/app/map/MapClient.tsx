@@ -348,6 +348,19 @@ export default function MapClient() {
         position={selectedPosition}
         onSubmit={handleReportSubmit}
       />
+
+      <HotspotDetailModal
+        open={detailModalOpen}
+        onClose={() => {
+          setDetailModalOpen(false);
+          setSelectedHotspot(undefined);
+        }}
+        hotspot={selectedHotspot}
+        onDelete={async (id) => {
+          setHotspots((prev) => prev.filter((h) => h.id !== id));
+          setDetailModalOpen(false);
+        }}
+      />
     </div>
   );
 }
