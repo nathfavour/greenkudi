@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -18,6 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PhotoGalleryModal from "./PhotoGalleryModal";
 
 interface HotspotDetailModalProps {
   open: boolean;
@@ -31,7 +33,6 @@ interface HotspotDetailModalProps {
     category?: string;
   };
   onDelete?: (id: string) => void;
-  onPhotoClick?: (photos: string[], index: number) => void;
 }
 
 const wasteCategories = {
@@ -48,8 +49,10 @@ export default function HotspotDetailModal({
   onClose,
   hotspot,
   onDelete,
-  onPhotoClick,
 }: HotspotDetailModalProps) {
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+
   if (!hotspot) return null;
 
   const categoryInfo = wasteCategories[hotspot.category as keyof typeof wasteCategories] || wasteCategories.mixed;
@@ -71,14 +74,16 @@ export default function HotspotDetailModal({
       onClose={onClose}
       maxWidth="sm"
       fullWidth
-      PaperProps={{
-        sx: {
-          borderRadius: 3,
-          maxHeight: "90vh",
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: 3,
+            maxHeight: "90vh",
+          },
         },
       }}
     >
-      <DialogTitle sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", pb: 1 }}>
+      <DialogTitle sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", pb: 1 }}>>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Box
             sx={{
@@ -179,7 +184,10 @@ export default function HotspotDetailModal({
                       transition: "all 0.2s",
                     },
                   }}
-                  onClick={() => onPhotoClick?.(hotspot.photos!, index)}
+                  onClick={() => {
+                    setGalleryIndex(index);
+                    setGalleryOpen(true);
+                  }}
                 >
                   <img
                     src={photo}
@@ -249,6 +257,13 @@ export default function HotspotDetailModal({
           Get Directions
         </Button>
       </DialogActions>
+
+      <PhotoGalleryModal
+        open={galleryOpen}
+        onClose={() => setGalleryOpen(false)}
+        photos={hotspot.photos || []}
+        initialIndex={galleryIndex}
+      />
     </Dialog>
   );
 }

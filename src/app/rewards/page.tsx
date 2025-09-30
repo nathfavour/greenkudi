@@ -1,17 +1,26 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useState } from "react";
 import { Card } from "../components/Card";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
-
-export const metadata: Metadata = {
-  title: "Rewards — GreenKudi",
-};
+import RewardsRedemptionModal from "../components/RewardsRedemptionModal";
 
 export default function RewardsPage() {
-  const points = 1247; // mock
+  const [selectedReward, setSelectedReward] = useState<{ id: string; name: string; cost: number; icon: string } | null>(null);
+  const [redemptionModalOpen, setRedemptionModalOpen] = useState(false);
+
+  const points = 1247;
+
+  const handleRedeem = async (data: { rewardId: string; amount: number; destination: string }) => {
+    console.log("Redemption data:", data);
+    setRedemptionModalOpen(false);
+    setSelectedReward(null);
+  };
+
   const tiers = [
     { 
       id: "t1", 
@@ -181,6 +190,10 @@ export default function RewardsPage() {
                   fullWidth
                   disabled={points < tier.cost}
                   sx={{ textTransform: 'none' }}
+                  onClick={() => {
+                    setSelectedReward({ id: tier.id, name: tier.name, cost: tier.cost, icon: tier.icon });
+                    setRedemptionModalOpen(true);
+                  }}
                 >
                   {points < tier.cost ? 'Not Enough Points' : 'Redeem Now'}
                 </Button>
@@ -296,6 +309,17 @@ export default function RewardsPage() {
           </Box>
         </Box>
       </Card>
+
+      <RewardsRedemptionModal
+        open={redemptionModalOpen}
+        onClose={() => {
+          setRedemptionModalOpen(false);
+          setSelectedReward(null);
+        }}
+        reward={selectedReward}
+        userPoints={points}
+        onRedeem={handleRedeem}
+      />
     </Box>
   );
 }

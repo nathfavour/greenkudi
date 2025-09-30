@@ -8,7 +8,7 @@ import HotspotDetailModal from "../components/HotspotDetailModal";
 
 interface Hotspot {
   id: string;
-  position: LatLngExpression;
+  position: [number, number];
   note?: string;
   createdAt?: number;
   photos?: string[];
