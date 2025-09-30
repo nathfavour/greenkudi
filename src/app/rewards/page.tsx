@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 import { Card } from "../components/Card";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 
 export const metadata: Metadata = {
   title: "Rewards — GreenKudi",
@@ -51,124 +56,246 @@ export default function RewardsPage() {
   ];
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <header className="page-header">
-        <h1 className="page-title">Rewards Center</h1>
-        <p className="page-subtitle">Earn points for environmental impact, redeem for real value</p>
-      </header>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <Box component="header">
+        <Typography variant="h3" component="h1" sx={{ fontWeight: 700, mb: 1 }}>
+          Rewards Center
+        </Typography>
+        <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+          Earn points for environmental impact, redeem for real value
+        </Typography>
+      </Box>
 
-      {/* Points Balance */}
       <Card variant="elevated" padding="lg" className="text-center bg-gradient-to-br from-[--primary] to-[--primary-dark] text-white">
-        <div className="mb-4">
-          <div className="w-16 h-16 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-4">
-            <span className="text-3xl">🎁</span>
-          </div>
-          <p className="text-white/80 text-sm mb-2">Your Balance</p>
-          <p className="text-5xl font-bold mb-2">{points.toLocaleString()}</p>
-          <p className="text-white/90 text-lg">GreenKudi Points</p>
-        </div>
+        <Box sx={{ mb: 2 }}>
+          <Box sx={{ 
+            width: 64, 
+            height: 64, 
+            mx: 'auto', 
+            bgcolor: 'rgba(255,255,255,0.2)', 
+            borderRadius: '50%', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            mb: 2
+          }}>
+            <span style={{ fontSize: '1.875rem' }}>🎁</span>
+          </Box>
+          <Typography sx={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.875rem', mb: 1 }}>
+            Your Balance
+          </Typography>
+          <Typography sx={{ fontSize: '3rem', fontWeight: 700, mb: 1 }}>
+            {points.toLocaleString()}
+          </Typography>
+          <Typography sx={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.125rem' }}>
+            GreenKudi Points
+          </Typography>
+        </Box>
         
-        <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/20">
-          <div className="text-center">
-            <p className="text-2xl font-bold">12</p>
-            <p className="text-xs text-white/80">Reports This Month</p>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl font-bold">3.2kg</p>
-            <p className="text-xs text-white/80">Recycled</p>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl font-bold">4th</p>
-            <p className="text-xs text-white/80">Community Rank</p>
-          </div>
-        </div>
+        <Grid container spacing={2} sx={{ pt: 2, borderTop: '1px solid rgba(255,255,255,0.2)' }}>
+          <Grid size={{ xs: 4 }}>
+            <Typography sx={{ fontSize: '1.5rem', fontWeight: 700 }}>12</Typography>
+            <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)' }}>
+              Reports This Month
+            </Typography>
+          </Grid>
+          <Grid size={{ xs: 4 }}>
+            <Typography sx={{ fontSize: '1.5rem', fontWeight: 700 }}>3.2kg</Typography>
+            <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)' }}>
+              Recycled
+            </Typography>
+          </Grid>
+          <Grid size={{ xs: 4 }}>
+            <Typography sx={{ fontSize: '1.5rem', fontWeight: 700 }}>4th</Typography>
+            <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)' }}>
+              Community Rank
+            </Typography>
+          </Grid>
+        </Grid>
       </Card>
 
-      {/* Rewards Grid */}
-      <div>
-        <h2 className="text-2xl font-bold text-[--text-primary] mb-6">Redeem Rewards</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <Box>
+        <Typography variant="h4" sx={{ fontWeight: 700, mb: 3 }}>
+          Redeem Rewards
+        </Typography>
+        <Grid container spacing={3}>
           {tiers.map((tier) => (
-            <Card 
-              key={tier.id} 
-              variant={tier.popular ? "elevated" : "default"} 
-              padding="lg" 
-              className="text-center relative"
-            >
-              {tier.popular && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="status-badge bg-[--primary] text-white text-xs">Most Popular</span>
-                </div>
-              )}
-              
-              <div className="w-12 h-12 mx-auto bg-[--primary-50] rounded-xl flex items-center justify-center text-2xl mb-4">
-                {tier.icon}
-              </div>
-              
-              <h3 className="text-lg font-bold text-[--text-primary] mb-2">{tier.name}</h3>
-              <p className="text-sm text-[--text-secondary] mb-4">{tier.description}</p>
-              
-              <div className="mb-4">
-                <span className="text-2xl font-bold text-[--text-primary]">{tier.cost}</span>
-                <span className="text-sm text-[--text-muted] ml-1">pts</span>
-              </div>
-              
-              <button 
-                className={`btn-primary w-full ${points < tier.cost ? 'opacity-50 cursor-not-allowed' : ''}`} 
-                disabled={points < tier.cost}
+            <Grid key={tier.id} size={{ xs: 12, sm: 6, lg: 3 }}>
+              <Card 
+                variant={tier.popular ? "elevated" : "default"} 
+                padding="lg" 
+                className="text-center relative"
               >
-                {points < tier.cost ? 'Not Enough Points' : 'Redeem Now'}
-              </button>
-            </Card>
+                {tier.popular && (
+                  <Box sx={{ 
+                    position: 'absolute', 
+                    top: -12, 
+                    left: '50%', 
+                    transform: 'translateX(-50%)' 
+                  }}>
+                    <Chip 
+                      label="Most Popular" 
+                      size="small"
+                      sx={{ 
+                        bgcolor: 'var(--primary)', 
+                        color: 'white',
+                        fontWeight: 600
+                      }}
+                    />
+                  </Box>
+                )}
+                
+                <Box sx={{ 
+                  width: 48, 
+                  height: 48, 
+                  mx: 'auto', 
+                  bgcolor: 'var(--primary-50)', 
+                  borderRadius: 3, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  fontSize: '1.5rem',
+                  mb: 2
+                }}>
+                  {tier.icon}
+                </Box>
+                
+                <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+                  {tier.name}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+                  {tier.description}
+                </Typography>
+                
+                <Box sx={{ mb: 2 }}>
+                  <Typography component="span" sx={{ fontSize: '1.5rem', fontWeight: 700 }}>
+                    {tier.cost}
+                  </Typography>
+                  <Typography component="span" sx={{ fontSize: '0.875rem', color: 'text.secondary', ml: 0.5 }}>
+                    pts
+                  </Typography>
+                </Box>
+                
+                <Button 
+                  variant="contained"
+                  fullWidth
+                  disabled={points < tier.cost}
+                  sx={{ textTransform: 'none' }}
+                >
+                  {points < tier.cost ? 'Not Enough Points' : 'Redeem Now'}
+                </Button>
+              </Card>
+            </Grid>
           ))}
-        </div>
-      </div>
+        </Grid>
+      </Box>
 
-      {/* How to Earn */}
       <Card variant="elevated" padding="lg">
-        <h2 className="text-2xl font-bold text-[--text-primary] mb-6 flex items-center gap-3">
-          <span className="w-8 h-8 rounded-lg bg-[--primary-50] flex items-center justify-center">💰</span>
-          How to Earn Points
-        </h2>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+          <Box sx={{ 
+            width: 32, 
+            height: 32, 
+            borderRadius: 2, 
+            bgcolor: 'var(--primary-50)', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center' 
+          }}>
+            💰
+          </Box>
+          <Typography variant="h4" sx={{ fontWeight: 700 }}>
+            How to Earn Points
+          </Typography>
+        </Box>
         
-        <div className="grid sm:grid-cols-2 gap-4">
+        <Grid container spacing={2}>
           {activities.map((activity, i) => (
-            <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-[--surface-elevated] hover:bg-[--surface-secondary] transition-colors duration-200">
-              <div className="w-10 h-10 bg-[--primary-50] rounded-lg flex items-center justify-center text-lg">
-                {activity.icon}
-              </div>
-              <div className="flex-1">
-                <p className="font-medium text-[--text-primary] text-sm">{activity.action}</p>
-                <p className="text-[--primary] font-bold text-sm">{activity.points}</p>
-              </div>
-            </div>
+            <Grid key={i} size={{ xs: 12, sm: 6 }}>
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 2, 
+                p: 2, 
+                borderRadius: 3, 
+                bgcolor: 'var(--surface-elevated)',
+                '&:hover': { bgcolor: 'var(--surface-secondary)' },
+                transition: 'background-color 0.2s'
+              }}>
+                <Box sx={{ 
+                  width: 40, 
+                  height: 40, 
+                  bgcolor: 'var(--primary-50)', 
+                  borderRadius: 2, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  fontSize: '1.125rem'
+                }}>
+                  {activity.icon}
+                </Box>
+                <Box sx={{ flex: 1 }}>
+                  <Typography sx={{ fontWeight: 500, fontSize: '0.875rem' }}>
+                    {activity.action}
+                  </Typography>
+                  <Typography sx={{ color: 'var(--primary)', fontWeight: 700, fontSize: '0.875rem' }}>
+                    {activity.points}
+                  </Typography>
+                </Box>
+              </Box>
+            </Grid>
           ))}
-        </div>
+        </Grid>
       </Card>
 
-      {/* Weekly Challenge */}
       <Card variant="elevated" padding="lg" className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
-            <span className="text-white text-xl">🏆</span>
-          </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-bold text-purple-800 mb-2">Weekly Challenge</h3>
-            <p className="text-purple-700 mb-4">
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+          <Box sx={{ 
+            width: 48, 
+            height: 48, 
+            borderRadius: 3, 
+            background: 'linear-gradient(to bottom right, rgb(168, 85, 247), rgb(219, 39, 119))',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center'
+          }}>
+            <span style={{ color: 'white', fontSize: '1.25rem' }}>🏆</span>
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <Typography sx={{ fontSize: '1.125rem', fontWeight: 700, color: 'rgb(107, 33, 168)', mb: 1 }}>
+              Weekly Challenge
+            </Typography>
+            <Typography sx={{ color: 'rgb(126, 34, 206)', mb: 2 }}>
               Report 5 waste hotspots this week and earn a bonus 100 points!
-            </p>
-            <div className="flex items-center gap-4 mb-4">
-              <div className="flex-1 bg-purple-200 rounded-full h-2">
-                <div className="bg-gradient-to-r from-purple-500 to-pink-600 h-2 rounded-full" style={{width: '60%'}}></div>
-              </div>
-              <span className="text-sm font-medium text-purple-800">3/5 completed</span>
-            </div>
-            <button className="btn-primary bg-gradient-to-r from-purple-500 to-pink-600 border-0">
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+              <Box sx={{ flex: 1, bgcolor: 'rgb(233, 213, 255)', borderRadius: 9999, height: 8 }}>
+                <Box sx={{ 
+                  background: 'linear-gradient(to right, rgb(168, 85, 247), rgb(219, 39, 119))',
+                  height: 8, 
+                  borderRadius: 9999,
+                  width: '60%'
+                }} />
+              </Box>
+              <Typography sx={{ fontSize: '0.875rem', fontWeight: 500, color: 'rgb(107, 33, 168)' }}>
+                3/5 completed
+              </Typography>
+            </Box>
+            <Button 
+              variant="contained"
+              sx={{ 
+                textTransform: 'none',
+                background: 'linear-gradient(to right, rgb(168, 85, 247), rgb(219, 39, 119))',
+                border: 0,
+                '&:hover': {
+                  background: 'linear-gradient(to right, rgb(147, 51, 234), rgb(190, 24, 93))'
+                }
+              }}
+            >
               Continue Challenge
-            </button>
-          </div>
-        </div>
+            </Button>
+          </Box>
+        </Box>
       </Card>
-    </div>
+    </Box>
   );
 }

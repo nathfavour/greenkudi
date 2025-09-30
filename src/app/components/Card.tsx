@@ -7,6 +7,7 @@ interface CardProps extends PropsWithChildren {
   variant?: "default" | "elevated" | "interactive";
   sx?: SxProps<Theme>;
   onClick?: () => void;
+  className?: string;
 }
 
 const paddingMap = {
@@ -21,11 +22,13 @@ export function Card({
   sx,
   children,
   onClick,
+  className,
 }: CardProps) {
   return (
     <MuiCard
       elevation={variant === "elevated" ? 4 : variant === "interactive" ? 2 : 1}
       onClick={onClick}
+      className={className}
       sx={{
         p: paddingMap[padding],
         borderRadius: 3,

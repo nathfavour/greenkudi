@@ -105,91 +105,6 @@ body {
   padding-bottom: calc(5.5rem + var(--safe-area-inset-bottom));
 }
 
-/* Button components */
-.btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-[--primary] text-white px-6 py-3 text-sm font-semibold shadow-sm transition-all duration-200 hover:bg-[--primary-dark] hover:shadow-md active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--background] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[--primary];
-}
-
-.btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-[--surface] border border-[--border] text-[--text-primary] px-6 py-3 text-sm font-semibold shadow-sm transition-all duration-200 hover:bg-[--surface-elevated] hover:shadow-md active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--background] disabled:opacity-50 disabled:cursor-not-allowed;
-}
-
-.btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl text-[--text-secondary] px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-[--surface-elevated] hover:text-[--text-primary] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--background];
-}
-
-.btn-icon {
-  @apply inline-flex items-center justify-center w-10 h-10 rounded-xl text-[--text-secondary] transition-all duration-200 hover:bg-[--surface-elevated] hover:text-[--text-primary] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--background];
-}
-
-/* Card components */
-.card {
-  @apply rounded-2xl bg-[--surface] border border-[--border-light] shadow-sm transition-all duration-200;
-}
-
-.card-interactive {
-  @apply card cursor-pointer hover:shadow-md hover:scale-[1.01] active:scale-[0.99];
-}
-
-.card-elevated {
-  @apply card shadow-md;
-}
-
-/* Navigation components */
-.nav-link {
-  @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-[--text-secondary] transition-all duration-200 hover:bg-[--surface-elevated] hover:text-[--text-primary] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--background];
-}
-
-.nav-link-active {
-  @apply bg-[--primary] text-white hover:bg-[--primary-dark] hover:text-white;
-}
-
-.nav-link-mobile {
-  @apply flex flex-col items-center gap-1 px-3 py-2 rounded-xl text-xs font-medium text-[--text-secondary] transition-all duration-200 hover:bg-[--surface-elevated] hover:text-[--text-primary] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary] focus-visible:ring-offset-2 focus-visible:ring-offset-[--background];
-}
-
-.nav-link-mobile-active {
-  @apply bg-[--primary-50] text-[--primary] hover:bg-[--primary-100] hover:text-[--primary];
-}
-
-/* Status indicators */
-.status-badge {
-  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold;
-}
-
-.status-success {
-  @apply bg-green-100 text-green-800;
-}
-
-.status-warning {
-  @apply bg-yellow-100 text-yellow-800;
-}
-
-.status-error {
-  @apply bg-red-100 text-red-800;
-}
-
-.status-info {
-  @apply bg-blue-100 text-blue-800;
-}
-
-/* Layout components */
-.container {
-  @apply mx-auto max-w-7xl px-4;
-}
-
-.page-header {
-  @apply space-y-2 mb-6;
-}
-
-.page-title {
-  @apply text-2xl font-bold text-[--text-primary];
-}
-
-.page-subtitle {
-  @apply text-[--text-secondary] text-sm;
-}
-
 /* Animations */
 .animate-slide-up {
   animation: slideUp 0.3s ease-out;
@@ -290,25 +205,5 @@ body {
   .glass-effect {
     background: rgba(30, 41, 59, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .status-success {
-    @apply bg-green-900/50 text-green-300;
-  }
-  
-  .status-warning {
-    @apply bg-yellow-900/50 text-yellow-300;
-  }
-  
-  .status-error {
-    @apply bg-red-900/50 text-red-300;
-  }
-  
-  .status-info {
-    @apply bg-blue-900/50 text-blue-300;
-  }
-
-  .nav-link-mobile-active {
-    @apply bg-[--primary-100] text-[--primary] hover:bg-[--primary-50] hover:text-[--primary];
   }
 }

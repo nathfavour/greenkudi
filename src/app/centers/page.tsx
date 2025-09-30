@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Card } from "../components/Card";
+import { Box, Typography, Grid, Button, Chip, LinearProgress } from "@mui/material";
 
 export const metadata: Metadata = {
   title: "Recycling & Energy Centers — GreenKudi",
@@ -68,9 +69,9 @@ const centers: Center[] = [
 
 function CenterCard({ center }: { center: Center }) {
   const statusColors = {
-    open: "bg-green-100 text-green-800",
-    busy: "bg-yellow-100 text-yellow-800", 
-    closed: "bg-red-100 text-red-800",
+    open: { bgcolor: 'success.lighter', color: 'success.dark' },
+    busy: { bgcolor: 'warning.lighter', color: 'warning.dark' }, 
+    closed: { bgcolor: 'error.lighter', color: 'error.dark' },
   };
 
   const typeIcons = {
@@ -80,102 +81,159 @@ function CenterCard({ center }: { center: Center }) {
   };
 
   const typeColors = {
-    recycling: "bg-blue-50 border-blue-200",
-    energy: "bg-amber-50 border-amber-200",
-    hybrid: "bg-purple-50 border-purple-200",
+    recycling: { bgcolor: '#EFF6FF', borderColor: '#BFDBFE' },
+    energy: { bgcolor: '#FFFBEB', borderColor: '#FDE68A' },
+    hybrid: { bgcolor: '#FAF5FF', borderColor: '#E9D5FF' },
+  };
+
+  const getCapacityColor = (capacity: number) => {
+    if (capacity > 80) return '#ef4444';
+    if (capacity > 60) return '#eab308';
+    return 'var(--primary)';
   };
 
   return (
     <Card 
       variant="elevated" 
       padding="lg" 
-      className={`hover:scale-[1.02] transition-transform duration-200 ${typeColors[center.type]}`}
+      sx={{
+        transition: 'transform 0.2s',
+        '&:hover': { transform: 'scale(1.02)' },
+        bgcolor: typeColors[center.type].bgcolor,
+        border: `1px solid ${typeColors[center.type].borderColor}`,
+      }}
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-[--primary-50] flex items-center justify-center text-2xl">
+      <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box sx={{ 
+            width: 48, 
+            height: 48, 
+            borderRadius: 1.5, 
+            bgcolor: 'var(--primary-50)', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            fontSize: '1.5rem' 
+          }}>
             {typeIcons[center.type]}
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-[--text-primary]">{center.name}</h3>
-            <p className="text-sm text-[--text-secondary] capitalize">{center.type} Center</p>
-          </div>
-        </div>
-        <div className="flex flex-col items-end gap-2">
-          <span className={`status-badge text-xs ${statusColors[center.status]}`}>
-            {center.status.charAt(0).toUpperCase() + center.status.slice(1)}
-          </span>
+          </Box>
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '1.125rem' }}>
+              {center.name}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
+              {center.type} Center
+            </Typography>
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1 }}>
+          <Chip
+            label={center.status.charAt(0).toUpperCase() + center.status.slice(1)}
+            size="small"
+            sx={{ 
+              ...statusColors[center.status],
+              fontSize: '0.75rem',
+              height: 24
+            }}
+          />
           {center.distance && (
-            <span className="text-xs text-[--text-muted] font-medium">{center.distance}</span>
+            <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 500 }}>
+              {center.distance}
+            </Typography>
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
 
-      <div className="space-y-3 mb-4">
-        <div className="flex items-start gap-2">
-          <span className="text-[--text-muted] text-sm">📍</span>
-          <p className="text-sm text-[--text-secondary] flex-1">{center.address}</p>
-        </div>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mb: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+          <Typography sx={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>📍</Typography>
+          <Typography variant="body2" sx={{ color: 'var(--text-secondary)', flex: 1 }}>
+            {center.address}
+          </Typography>
+        </Box>
         
-        <div className="flex items-start gap-2">
-          <span className="text-[--text-muted] text-sm">🕒</span>
-          <p className="text-sm text-[--text-secondary]">{center.hours}</p>
-        </div>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+          <Typography sx={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>🕒</Typography>
+          <Typography variant="body2" sx={{ color: 'var(--text-secondary)' }}>
+            {center.hours}
+          </Typography>
+        </Box>
 
         {center.contact && (
-          <div className="flex items-center gap-2">
-            <span className="text-[--text-muted] text-sm">📞</span>
-            <a href={`tel:${center.contact}`} className="text-sm text-[--primary] hover:underline">
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography sx={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>📞</Typography>
+            <Typography
+              component="a"
+              href={`tel:${center.contact}`}
+              variant="body2"
+              sx={{ color: 'var(--primary)', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+            >
               {center.contact}
-            </a>
-          </div>
+            </Typography>
+          </Box>
         )}
-      </div>
+      </Box>
 
-      <div className="mb-4">
-        <p className="text-sm font-medium text-[--text-primary] mb-2">Accepts:</p>
-        <div className="flex flex-wrap gap-2">
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="body2" sx={{ fontWeight: 500, color: 'var(--text-primary)', mb: 1 }}>
+          Accepts:
+        </Typography>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
           {center.materials.map((material, i) => (
-            <span key={i} className="status-badge bg-[--surface-elevated] text-[--text-secondary] text-xs">
-              {material}
-            </span>
+            <Chip
+              key={i}
+              label={material}
+              size="small"
+              sx={{ 
+                bgcolor: 'var(--surface-elevated)', 
+                color: 'var(--text-secondary)',
+                fontSize: '0.75rem',
+                height: 24
+              }}
+            />
           ))}
-        </div>
-      </div>
+        </Box>
+      </Box>
 
-      <div className="mb-4">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-[--text-primary]">Capacity</span>
-          <span className="text-sm text-[--text-secondary]">{center.capacity}%</span>
-        </div>
-        <div className="w-full bg-[--surface-secondary] rounded-full h-2">
-          <div 
-            className={`h-2 rounded-full transition-all duration-300 ${
-              center.capacity > 80 ? 'bg-red-500' : 
-              center.capacity > 60 ? 'bg-yellow-500' : 
-              'bg-[--primary]'
-            }`}
-            style={{ width: `${center.capacity}%` }}
+      <Box sx={{ mb: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+          <Typography variant="body2" sx={{ fontWeight: 500, color: 'var(--text-primary)' }}>
+            Capacity
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'var(--text-secondary)' }}>
+            {center.capacity}%
+          </Typography>
+        </Box>
+        <Box sx={{ width: '100%', bgcolor: 'var(--surface-secondary)', borderRadius: 1, height: 8 }}>
+          <Box 
+            sx={{ 
+              height: 8, 
+              borderRadius: 1, 
+              transition: 'all 0.3s',
+              bgcolor: getCapacityColor(center.capacity),
+              width: `${center.capacity}%`
+            }}
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
 
-      <div className="flex gap-2">
-        <a
-          className="btn-primary flex-1 text-center"
+      <Box sx={{ display: 'flex', gap: 1 }}>
+        <Button
+          variant="contained"
           href={`https://www.google.com/maps?q=${center.lat},${center.lng}`}
           target="_blank"
           rel="noopener noreferrer"
+          sx={{ flex: 1 }}
         >
           📍 Directions
-        </a>
-        <a
-          className="btn-secondary"
+        </Button>
+        <Button
+          variant="outlined"
           href={`/map?lat=${center.lat}&lng=${center.lng}`}
         >
           🗺️ View Map
-        </a>
-      </div>
+        </Button>
+      </Box>
     </Card>
   );
 }
@@ -189,61 +247,98 @@ export default function CentersPage() {
   ];
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <header className="page-header">
-        <h1 className="page-title">Collection Centers</h1>
-        <p className="page-subtitle">Find recycling and waste-to-energy centers near you</p>
-      </header>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <Box>
+        <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
+          Collection Centers
+        </Typography>
+        <Typography variant="h6" sx={{ color: 'text.secondary', fontWeight: 400 }}>
+          Find recycling and waste-to-energy centers near you
+        </Typography>
+      </Box>
 
-      {/* Quick Stats */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <Grid container spacing={2}>
         {stats.map((stat) => (
-          <Card key={stat.label} variant="default" padding="md" className="text-center animate-scale-in">
-            <div className="w-12 h-12 mx-auto bg-[--primary-50] rounded-xl flex items-center justify-center text-2xl mb-3">
-              {stat.icon}
-            </div>
-            <p className="text-2xl font-bold text-[--text-primary] mb-1">{stat.value}</p>
-            <p className="text-sm text-[--text-secondary]">{stat.label}</p>
-          </Card>
+          <Grid key={stat.label} size={{ xs: 12, sm: 6, lg: 3 }}>
+            <Card variant="default" padding="md" >
+              <Box sx={{ textAlign: 'center' }}>
+                <Box sx={{ 
+                  width: 48, 
+                  height: 48, 
+                  mx: 'auto', 
+                  bgcolor: 'var(--primary-50)', 
+                  borderRadius: 1.5, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  fontSize: '1.5rem', 
+                  mb: 1.5 
+                }}>
+                  {stat.icon}
+                </Box>
+                <Typography variant="h4" sx={{ fontWeight: 700, color: 'var(--text-primary)', mb: 0.5 }}>
+                  {stat.value}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'var(--text-secondary)' }}>
+                  {stat.label}
+                </Typography>
+              </Box>
+            </Card>
+          </Grid>
         ))}
-      </div>
+      </Grid>
 
-      {/* Centers Grid */}
-      <div>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-[--text-primary]">Nearby Centers</h2>
-          <div className="flex gap-2">
-            <button className="btn-secondary text-sm">📍 Near Me</button>
-            <button className="btn-secondary text-sm">🔍 Filter</button>
-          </div>
-        </div>
+      <Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+          <Typography variant="h4" sx={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+            Nearby Centers
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button variant="outlined" size="small">📍 Near Me</Button>
+            <Button variant="outlined" size="small">🔍 Filter</Button>
+          </Box>
+        </Box>
         
-        <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        <Grid container spacing={3}>
           {centers.map((center) => (
-            <CenterCard key={center.id} center={center} />
+            <Grid key={center.id} size={{ xs: 12, lg: 6, xl: 4 }}>
+              <CenterCard center={center} />
+            </Grid>
           ))}
-        </div>
-      </div>
+        </Grid>
+      </Box>
 
-      {/* Action Card */}
-      <Card variant="elevated" padding="lg" className="bg-gradient-to-r from-[--primary-50] to-blue-50 border-[--primary]/20">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-[--primary] flex items-center justify-center">
-            <span className="text-white text-xl">🎯</span>
-          </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-bold text-[--primary] mb-2">Cannot Find a Center?</h3>
-            <p className="text-[--text-secondary] mb-4">
+      <Card variant="elevated" padding="lg"  sx={{ 
+        background: 'linear-gradient(to right, var(--primary-50), #EFF6FF)', 
+        border: '1px solid rgba(var(--primary-rgb), 0.2)' 
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+          <Box sx={{ 
+            width: 48, 
+            height: 48, 
+            borderRadius: 1.5, 
+            bgcolor: 'var(--primary)', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center' 
+          }}>
+            <Typography sx={{ color: 'white', fontSize: '1.25rem' }}>🎯</Typography>
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, color: 'var(--primary)', mb: 1 }}>
+              Cannot Find a Center?
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'var(--text-secondary)', mb: 2 }}>
               Help us expand our network! Suggest a new location or partner with us to establish 
               collection points in underserved areas.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <button className="btn-primary">📍 Suggest Location</button>
-              <button className="btn-secondary">🤝 Partner With Us</button>
-            </div>
-          </div>
-        </div>
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+              <Button variant="contained">📍 Suggest Location</Button>
+              <Button variant="outlined">🤝 Partner With Us</Button>
+            </Box>
+          </Box>
+        </Box>
       </Card>
-    </div>
+    </Box>
   );
 }

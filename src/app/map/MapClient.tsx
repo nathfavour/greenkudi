@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import L, { type LatLngExpression, type LeafletMouseEvent, type Map as LeafletMap } from "leaflet";
+import { Box, Button, IconButton, CircularProgress } from "@mui/material";
 
 interface Hotspot {
   id: string;
@@ -126,93 +127,114 @@ export default function MapClient() {
           : "Map ready"}
       </div>
       
-      {/* Loading State */}
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[--surface]/80 backdrop-blur-sm">
-          <div className="flex items-center gap-3 px-6 py-4 bg-white rounded-xl shadow-lg">
-            <div className="w-6 h-6 border-2 border-[--primary] border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-sm font-medium text-[--text-primary]">Loading hotspots...</span>
-          </div>
-        </div>
+        <Box sx={{ 
+          position: 'absolute', 
+          inset: 0, 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          bgcolor: 'rgba(var(--surface-rgb), 0.8)', 
+          backdropFilter: 'blur(4px)' 
+        }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, px: 3, py: 2, bgcolor: 'white', borderRadius: 3, boxShadow: 3 }}>
+            <CircularProgress size={24} />
+            <Box component="span" sx={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-primary)' }}>
+              Loading hotspots...
+            </Box>
+          </Box>
+        </Box>
       )}
       
-      {/* Error State */}
       {error && !loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[--surface]/80 backdrop-blur-sm">
-          <div className="flex flex-col items-center gap-4 px-8 py-6 bg-white rounded-xl shadow-lg text-center max-w-sm">
-            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-              <span className="text-2xl">⚠️</span>
-            </div>
-            <div>
-              <h3 className="font-bold text-[--text-primary] mb-2">Connection Error</h3>
-              <p className="text-sm text-red-600 mb-4">{error}</p>
-            </div>
-            <button
-              type="button"
-              onClick={fetchHotspots}
-              className="btn-primary"
-            >
+        <Box sx={{ 
+          position: 'absolute', 
+          inset: 0, 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          bgcolor: 'rgba(var(--surface-rgb), 0.8)', 
+          backdropFilter: 'blur(4px)' 
+        }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, px: 4, py: 3, bgcolor: 'white', borderRadius: 3, boxShadow: 3, textAlign: 'center', maxWidth: '24rem' }}>
+            <Box sx={{ width: 48, height: 48, bgcolor: '#fee2e2', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>
+              ⚠️
+            </Box>
+            <Box>
+              <Box component="h3" sx={{ fontWeight: 'bold', color: 'var(--text-primary)', mb: 1 }}>
+                Connection Error
+              </Box>
+              <Box component="p" sx={{ fontSize: '0.875rem', color: '#dc2626', mb: 2 }}>
+                {error}
+              </Box>
+            </Box>
+            <Button variant="contained" onClick={fetchHotspots}>
               🔄 Try Again
-            </button>
-          </div>
-        </div>
+            </Button>
+          </Box>
+        </Box>
       )}
       
-      {/* Saving Indicator */}
       {saving && !loading && (
-        <div className="absolute top-4 right-4 z-10">
-          <div className="flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg border border-[--border]">
-            <div className="w-4 h-4 border-2 border-[--primary] border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-sm font-medium text-[--text-primary]">Saving report...</span>
-          </div>
-        </div>
+        <Box sx={{ position: 'absolute', top: 16, right: 16, zIndex: 10 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 2, py: 1, bgcolor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(4px)', borderRadius: 2, boxShadow: 3, border: '1px solid var(--border)' }}>
+            <CircularProgress size={16} />
+            <Box component="span" sx={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-primary)' }}>
+              Saving report...
+            </Box>
+          </Box>
+        </Box>
       )}
       
       {/* Map Controls */}
-      <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
-        <button 
-          className="btn-icon bg-white/90 backdrop-blur-sm shadow-lg border border-[--border]"
+      <Box sx={{ position: 'absolute', top: 16, left: 16, zIndex: 10, display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <IconButton 
+          sx={{ bgcolor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(4px)', boxShadow: 3, border: '1px solid var(--border)', '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.95)' } }}
           title="Center on Lagos"
           onClick={() => mapRef.current?.setView(center as [number, number], 12)}
         >
           🎯
-        </button>
-        <button 
-          className="btn-icon bg-white/90 backdrop-blur-sm shadow-lg border border-[--border]"
+        </IconButton>
+        <IconButton 
+          sx={{ bgcolor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(4px)', boxShadow: 3, border: '1px solid var(--border)', '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.95)' } }}
           title="Refresh hotspots"
           onClick={fetchHotspots}
           disabled={loading}
         >
           🔄
-        </button>
-      </div>
+        </IconButton>
+      </Box>
       
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 z-10">
-        <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg border border-[--border] p-3">
-          <h4 className="text-xs font-bold text-[--text-primary] mb-2">Legend</h4>
-          <div className="space-y-1 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-              <span className="text-[--text-secondary]">Active Hotspots</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-              <span className="text-[--text-secondary]">Click to Report</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Box sx={{ position: 'absolute', bottom: 16, left: 16, zIndex: 10 }}>
+        <Box sx={{ bgcolor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(4px)', borderRadius: 2, boxShadow: 3, border: '1px solid var(--border)', p: 1.5 }}>
+          <Box component="h4" sx={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-primary)', mb: 1 }}>
+            Legend
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, fontSize: '0.75rem' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ width: 12, height: 12, bgcolor: '#ef4444', borderRadius: '50%' }} />
+              <Box component="span" sx={{ color: 'var(--text-secondary)' }}>Active Hotspots</Box>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ width: 12, height: 12, bgcolor: '#9ca3af', borderRadius: '50%' }} />
+              <Box component="span" sx={{ color: 'var(--text-secondary)' }}>Click to Report</Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
       
       {/* Status Bar */}
-      <div className="absolute bottom-4 right-4 z-10">
-        <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg border border-[--border] px-3 py-2">
-          <div className="flex items-center gap-2 text-xs">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="font-medium text-[--text-primary]">{hotspots.length} hotspots</span>
-          </div>
-        </div>
-      </div>
+      <Box sx={{ position: 'absolute', bottom: 16, right: 16, zIndex: 10 }}>
+        <Box sx={{ bgcolor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(4px)', borderRadius: 2, boxShadow: 3, border: '1px solid var(--border)', px: 1.5, py: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, fontSize: '0.75rem' }}>
+            <Box sx={{ width: 8, height: 8, bgcolor: '#22c55e', borderRadius: '50%', animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
+            <Box component="span" sx={{ fontWeight: 500, color: 'var(--text-primary)' }}>
+              {hotspots.length} hotspots
+            </Box>
+          </Box>
+        </Box>
+      </Box>
     </div>
   );
 }

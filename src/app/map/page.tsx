@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Card } from "../components/Card";
 import MapWrapper from "./MapWrapper";
+import { Box, Typography, Grid, Button } from "@mui/material";
 
 export const metadata: Metadata = {
   title: "Waste Hotspot Map — GreenKudi",
@@ -9,83 +10,133 @@ export const metadata: Metadata = {
 
 export default function MapPage() {
   const stats = [
-    { label: "Active Reports", value: "342", icon: "📍", color: "text-red-600" },
-    { label: "Resolved", value: "1,847", icon: "✅", color: "text-green-600" },
-    { label: "This Week", value: "+28", icon: "📈", color: "text-blue-600" },
-    { label: "Your Reports", value: "12", icon: "👤", color: "text-purple-600" },
+    { label: "Active Reports", value: "342", icon: "📍", color: "#dc2626" },
+    { label: "Resolved", value: "1,847", icon: "✅", color: "#16a34a" },
+    { label: "This Week", value: "+28", icon: "📈", color: "#2563eb" },
+    { label: "Your Reports", value: "12", icon: "👤", color: "#9333ea" },
   ];
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <header className="page-header">
-        <h1 className="page-title">Waste Hotspot Map</h1>
-        <p className="page-subtitle">Report waste dumps and track community cleanup efforts</p>
-      </header>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Box>
+        <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
+          Waste Hotspot Map
+        </Typography>
+        <Typography variant="h6" sx={{ color: 'text.secondary', fontWeight: 400 }}>
+          Report waste dumps and track community cleanup efforts
+        </Typography>
+      </Box>
 
-      {/* Quick Stats */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <Grid container spacing={2}>
         {stats.map((stat) => (
-          <Card key={stat.label} variant="default" padding="md" className="text-center animate-scale-in">
-            <div className={`w-12 h-12 mx-auto bg-[--primary-50] rounded-xl flex items-center justify-center text-2xl mb-3 ${stat.color}`}>
-              {stat.icon}
-            </div>
-            <p className={`text-2xl font-bold mb-1 ${stat.color}`}>{stat.value}</p>
-            <p className="text-sm text-[--text-secondary]">{stat.label}</p>
-          </Card>
+          <Grid key={stat.label} size={{ xs: 12, sm: 6, lg: 3 }}>
+            <Card variant="default" padding="md" >
+              <Box sx={{ textAlign: 'center' }}>
+                <Box sx={{ 
+                  width: 48, 
+                  height: 48, 
+                  mx: 'auto', 
+                  bgcolor: 'var(--primary-50)', 
+                  borderRadius: 1.5, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  fontSize: '1.5rem', 
+                  mb: 1.5,
+                  color: stat.color
+                }}>
+                  {stat.icon}
+                </Box>
+                <Typography variant="h4" sx={{ fontWeight: 700, mb: 0.5, color: stat.color }}>
+                  {stat.value}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'var(--text-secondary)' }}>
+                  {stat.label}
+                </Typography>
+              </Box>
+            </Card>
+          </Grid>
         ))}
-      </div>
+      </Grid>
 
-      {/* Action Buttons */}
-      <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
-        <button className="btn-primary">📍 Report Hotspot</button>
-        <button className="btn-secondary">🗺️ View All Reports</button>
-        <button className="btn-secondary">📊 Analytics</button>
-        <button className="btn-ghost">🔍 Search Location</button>
-      </div>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, justifyContent: { xs: 'center', sm: 'flex-start' } }}>
+        <Button variant="contained">📍 Report Hotspot</Button>
+        <Button variant="outlined">🗺️ View All Reports</Button>
+        <Button variant="outlined">📊 Analytics</Button>
+        <Button variant="text">🔍 Search Location</Button>
+      </Box>
 
-      {/* Map Container */}
-      <Card variant="elevated" className="overflow-hidden p-0">
-        <div className="h-[600px] relative">
+      <Card variant="elevated"  sx={{ overflow: 'hidden', p: 0 }}>
+        <Box sx={{ height: 600, position: 'relative' }}>
           <MapWrapper />
-        </div>
+        </Box>
       </Card>
 
-      {/* Quick Actions */}
-      <div className="grid sm:grid-cols-2 gap-6">
-        <Card variant="elevated" padding="lg" className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center">
-              <span className="text-white text-xl">📱</span>
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-blue-800 mb-2">Report via Mobile</h3>
-              <p className="text-blue-700 text-sm mb-4">
-                Use our mobile app to quickly report waste hotspots with GPS location and photos.
-              </p>
-              <button className="btn-primary bg-blue-500 hover:bg-blue-600 border-0">
-                📲 Download App
-              </button>
-            </div>
-          </div>
-        </Card>
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <Card variant="elevated" padding="lg"  sx={{ 
+            background: 'linear-gradient(to bottom right, #EFF6FF, #ECFEFF)', 
+            border: '1px solid #BFDBFE' 
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+              <Box sx={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: 1.5, 
+                bgcolor: '#3b82f6', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center' 
+              }}>
+                <Typography sx={{ color: 'white', fontSize: '1.25rem' }}>📱</Typography>
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#1e40af', mb: 1 }}>
+                  Report via Mobile
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#1d4ed8', mb: 2 }}>
+                  Use our mobile app to quickly report waste hotspots with GPS location and photos.
+                </Typography>
+                <Button variant="contained" sx={{ bgcolor: '#3b82f6', '&:hover': { bgcolor: '#2563eb' } }}>
+                  📲 Download App
+                </Button>
+              </Box>
+            </Box>
+          </Card>
+        </Grid>
 
-        <Card variant="elevated" padding="lg" className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-green-500 flex items-center justify-center">
-              <span className="text-white text-xl">👥</span>
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-green-800 mb-2">Community Validation</h3>
-              <p className="text-green-700 text-sm mb-4">
-                Help verify reported hotspots and earn points for accurate community monitoring.
-              </p>
-              <button className="btn-primary bg-green-500 hover:bg-green-600 border-0">
-                🔍 Start Validating
-              </button>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </div>
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <Card variant="elevated" padding="lg"  sx={{ 
+            background: 'linear-gradient(to bottom right, #F0FDF4, #D1FAE5)', 
+            border: '1px solid #86efac' 
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+              <Box sx={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: 1.5, 
+                bgcolor: '#22c55e', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center' 
+              }}>
+                <Typography sx={{ color: 'white', fontSize: '1.25rem' }}>👥</Typography>
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#166534', mb: 1 }}>
+                  Community Validation
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#15803d', mb: 2 }}>
+                  Help verify reported hotspots and earn points for accurate community monitoring.
+                </Typography>
+                <Button variant="contained" sx={{ bgcolor: '#22c55e', '&:hover': { bgcolor: '#16a34a' } }}>
+                  🔍 Start Validating
+                </Button>
+              </Box>
+            </Box>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
